@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>WebRTC Video Conference Tutorial - Plain WebRTC</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+		<link href="assets/style.css" rel="stylesheet" type="text/css" />
+	</head>
+	<body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-disabled aside-fixed" style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
+		<div class="d-flex flex-column flex-root">
+			<div class="page d-flex flex-row flex-column-fluid">
+				<div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+						<div class="toolbar" id="kt_toolbar">
+							<div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+								<div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+									<h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1" id="title"></h1>
+								</div>
+							</div>
+						</div>
+						<div class="post d-flex flex-column-fluid" id="kt_post">
+							<div id="kt_content_container" class="container-xxl">
+                <div id="inner1" class="d-flex flex-column flex-lg-row">
+                  <div class="card card-flush">
+                    <div class="card-body pt-5">
+                      <div id="selectRoom" class="card card-flush">
+                          <label>Type the room number</label>
+                          <input id="roomNumber" type="text" />
+                          <label for="username">Username:</label>
+                          <input type="text" id="username" name="username">
+                          <button id="goRoom">Go</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+               		
+								<div id="chatContainer" class="d-flex flex-column flex-lg-row" style="display:none !important;">
+									<div class="stretcher"></div>
+									<div class="flex-column flex-lg-row-auto w-100 w-lg-300px w-xl-300px mb-10 mb-lg-0">
+										<div class="card card-flush full-height">
+											<div class="card-body pt-5" id="kt_chat_contacts_body myItemList">
+												<div id="roomDetails" class="d-flex flex-column flex-lg-row">
+													<div id="roonumber">Room: <span></span></div>
+												</div>
+												<div id="contactsList" class="scroll-y me-n5 pe-5 h-200px h-lg-auto" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_chat_contacts_header" data-kt-scroll-wrappers="#kt_content, #kt_chat_contacts_body" data-kt-scroll-offset="5px">
+													<div class="d-flex flex-stack py-4">
+														<div class="d-flex align-items-center">
+															<div class="symbol symbol-45px symbol-circle">
+																<span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">M</span>
+																<div class="symbol-badge bg-success start-100 top-100 border-4 h-15px w-15px ms-n2 mt-n2"></div>
+															</div>
+															<div class="ms-5">
+																<span class="fs-5 fw-bolder text-gray-900 mb-2">Melody Macy</span>
+															</div>
+														</div>
+													</div>
+													<div class="separator separator-dashed d-none"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div id="consultingRoom" class="d-flex flex-column flex-lg-column mb-10 ms-lg-7 ms-xl-10" style="display:none !important">
+										<div class="card card-flush">
+											<video id="localVideo" autoplay></video>
+											<video id="remoteVideo" autoplay></video>
+										</div>
+										<div id="buttons" class="d-inl mt-10">
+											<button id="mute"  onclick="enableMute()"value="On" class="btn btn-icon btn-dark"><i class="fas fa-microphone-slash"></i></button>
+											<button id="camera"  onclick="camera()"  value="On"class="btn btn-icon btn-dark"><i class="fas fa-video-slash"></i></button>
+											<button id="hangup" class="btn btn-icon btn-danger"><i class="fas fa-phone-slash"></i></button>
+										</div>
+									</div>
+									<div class="flex-lg-row-fluid ms-lg-7 ms-xl-10">
+										<div class="card full-height" id="kt_chat_messenger">
+											<div class="card-body" id="kt_chat_messenger_body inner2">
+												<div id="message-container" class="scroll-y me-n5 pe-5 h-300px h-lg-auto" data-kt-element="messages" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_chat_messenger_header, #kt_chat_messenger_footer" data-kt-scroll-wrappers="#kt_content, #kt_chat_messenger_body" data-kt-scroll-offset="5px">
+												</div>
+											</div>
+											<div class="card-footer pt-4" id="kt_chat_messenger_footer">
+												<form id="send-container">
+												<textarea class="form-control form-control-flush mb-3" rows="1" data-kt-element="input" placeholder="Type a message" id="message-input"></textarea>
+												<div class="d-flex flex-stack">
+													<div class="d-flex align-items-center me-2">
+													<button class="btn btn-sm btn-icon btn-active-light-primary me-1" type="button" data-bs-toggle="tooltip" title="Coming soon">
+														<i class="bi bi-paperclip fs-3"></i>
+													</button>
+													<button class="btn btn-sm btn-icon btn-active-light-primary me-1" type="button" data-bs-toggle="tooltip" title="Coming soon">
+														<i class="bi bi-upload fs-3"></i>
+													</button>
+													</div>
+													<button class="btn btn-primary" type="submit" id="send-button" data-kt-element="send">Send</button>
+												</div>
+											
+												</form>	
+												<input type="file" id="fileInput" />				
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="footer py-4 d-flex flex-lg-column" id="kt_footer">
+						<div class="container-fluid d-flex flex-column flex-md-row align-items-center justify-content-between">
+							<div class="text-dark order-2 order-md-1">
+								<span class="text-muted fw-bold me-1">Χρυσόστομος Ισκάκης</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
+			<span class="svg-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+					<rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)" fill="black" />
+					<path d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z" fill="black" />
+				</svg>
+			</span>
+		</div>
+		<script src="/socket.io/socket.io.js"></script>
+	<script src="https://kit.fontawesome.com/0439e02203.js" crossorigin="anonymous"></script>
+    <script src="client.js"></script>
+    <script src="server.js"></script>
+
+	</body>
+</html>
+
